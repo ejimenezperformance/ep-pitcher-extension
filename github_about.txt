@@ -1,0 +1,6 @@
+Description (<=350):
++0.3 ft of fastball extension came with +0.79 CSW% pts (≈ +1.4 mph of velo), velocity held constant — but not with less damage (xwOBA, RV). League-wide Statcast 2021–2026, 618 pitcher pairs, biomechanics + offseason training plan. EN/ES.
+
+Website: https://ejimenezperformance.github.io
+
+Topics: baseball, mlb, statcast, biomechanics, pitching, player-development, strength-and-conditioning, sports-analytics, python
