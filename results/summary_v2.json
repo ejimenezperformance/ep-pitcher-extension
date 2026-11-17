@@ -1,0 +1,13 @@
+{
+  "n_pairs": 618,
+  "n_pairs_shape": 618,
+  "corr_d_ext_with": {
+    "d_ivb": 0.0885715604524676,
+    "d_hb_arm": -0.12876350329351235,
+    "d_spin": -0.0068460848128613664,
+    "d_velo": 0.06502876440852126
+  },
+  "mean_called_pct": 18.833627963224544,
+  "mean_swstr_pct": 10.185284963370515,
+  "median_fastballs_per_season": 695.0
+}

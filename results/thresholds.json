@@ -1,0 +1,9 @@
+{
+  "n_rolling_windows": 61410,
+  "sd_5outing_dev_ft": 0.06520584640775784,
+  "p95_abs_5outing_dev_ft": 0.12923308462743047,
+  "p99_abs_5outing_dev_ft": 0.18803488428319878,
+  "pct_below_minus_0.10": 5.723823481517668,
+  "pct_below_minus_0.20": 0.28334147532975085,
+  "absence_base_rate_pct": 53.632958801498134
+}

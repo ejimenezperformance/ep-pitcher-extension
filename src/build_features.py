@@ -31,6 +31,15 @@ def season_profiles(df: pd.DataFrame) -> pd.DataFrame:
     df["swing"] = df["description"].isin(SWING)
     df["whiff"] = df["description"].isin(WHIFF)
     df["csw"] = df["description"].isin(WHIFF | CALLED)
+    df["called"] = df["description"].isin(CALLED)
+    df["swstr"] = df["description"].isin(WHIFF)
+    df["in_zone"] = df["zone"].between(1, 9) if "zone" in df else np.nan
+    df["z_swing"] = df["in_zone"] & df["swing"]
+    df["z_called"] = df["in_zone"] & df["called"]
+    df["o_called"] = ~df["in_zone"] & df["called"] & df["zone"].notna()
+    # pitch shape in inches; horizontal break signed so + = arm side for both hands
+    df["ivb"] = df["pfx_z"] * 12
+    df["hb_arm"] = np.where(df["p_throws"] == "R", -df["pfx_x"], df["pfx_x"]) * 12
     df["team"] = np.where(df["inning_topbot"] == "Top", df["home_team"], df["away_team"])
     pa = df["woba_denom"].fillna(0) > 0
     df["x_num"] = np.where(pa, df["estimated_woba_using_speedangle"].fillna(df["woba_value"]), 0.0)
@@ -56,6 +65,14 @@ def season_profiles(df: pd.DataFrame) -> pd.DataFrame:
             "swings": int(g["swing"].sum()),
             "whiff_pct": 100 * g["whiff"].sum() / max(g["swing"].sum(), 1),
             "csw_pct": 100 * g["csw"].mean(),
+            "called_pct": 100 * g["called"].mean(),   # called strikes per pitch
+            "swstr_pct": 100 * g["swstr"].mean(),     # swinging strikes per pitch
+            "ivb": g["ivb"].mean(), "hb_arm": g["hb_arm"].mean(),
+            "spin": g["release_spin_rate"].mean(),
+            "zone_pct": 100 * g["in_zone"].mean(),
+            "z_swing_pct": 100 * g["z_swing"].sum() / max(g["in_zone"].sum(), 1),
+            "z_called_pct": 100 * g["z_called"].sum() / max(g["in_zone"].sum(), 1),
+            "o_called_pct": 100 * g["o_called"].sum() / max((~g["in_zone"] & g["zone"].notna()).sum(), 1),
             "rv100": -100 * g["delta_run_exp"].sum() / len(g),  # + = good for pitcher
             "xwoba": g["x_num"].sum() / g["x_den"].sum() if g["x_den"].sum() else np.nan,
             "starter_share": games["first"].mean(),
@@ -78,7 +95,8 @@ def make_pairs(seasons: pd.DataFrame) -> pd.DataFrame:
     p = a.merge(b, on="pitcher")
     p = p[p["year_y1"] == p["year_y0"] + 1].copy()
     for m in ["ext", "velo", "eff_velo", "perceived_gain", "arm_angle", "whiff_pct",
-              "csw_pct", "rv100", "xwoba"]:
+              "csw_pct", "called_pct", "swstr_pct", "ivb", "hb_arm", "spin", "zone_pct", "z_swing_pct", "z_called_pct",
+              "o_called_pct", "rv100", "xwoba"]:
         p[f"d_{m}"] = p[f"{m}_y1"] - p[f"{m}_y0"]
     p["pair"] = p["year_y0"].astype(str) + "->" + p["year_y1"].astype(str)
     # alternative-explanation flags

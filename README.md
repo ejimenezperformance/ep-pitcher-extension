@@ -33,6 +33,30 @@
 4. **A big drop is a health flag.** All 5 pairs that lost 0.3 ft or more also had a long absence (IL or option) in one of the two seasons. `INTERPRETATION`: n = 5, so this is a monitoring cue, not a finding.
 5. **Do not add extension to a whiff projection model.** Out of sample, adding it did not reduce error (MAE change +0.0002, CI −0.015 to +0.014).
 
+### Follow-up tests (v1.2) — `EXPLORATORY`
+Added after the pre-registered analysis, so they are labeled exploratory.
+
+| Test | Result (per +0.3 ft, velocity constant) |
+|---|---|
+| Called strikes per pitch | **+0.56 pts** (95% CI +0.11 to +1.03), BH q = 0.031 — about 71% of the CSW% gain |
+| Swinging strikes per pitch | +0.21 pts (CI −0.24 to +0.64), not significant |
+| CSW% with pitch-shape controls (IVB, arm-side break, spin) | **+0.85 pts**, p < 0.001 — the effect held |
+
+| Fastballs in the zone (Zone%) | +0.80 pts (p = 0.020, BH q = 0.059) |
+| Swings at zone fastballs (Z-Swing%) | −0.84 pts (p = 0.030, BH q = 0.059) |
+| Called strikes outside the zone | −0.04 pts (no umpire effect) |
+
+In a typical season (695 fastballs), +0.3 ft came with about 5.5 more strikes, roughly 4 of them called. Location points to both more zone fastballs and fewer swings at them; neither survives correction for four tests on its own. Code: `src/decomposition.py`.
+
+### Monitoring thresholds from data (v1.3)
+Across 61,410 five-outing windows from healthy pitcher-seasons, a pitcher's 5-outing average stayed within ±0.13 ft of his own season average 95% of the time and fell 0.20 ft or more below it only 0.3% of the time → **watch at −0.13 ft, alert at −0.20 ft**. Season losses of ≥ 0.3 ft came with a long absence in 5 of 5 pairs (base rate 54%); losses of 0.1–0.3 ft did not (55–58%). Code: `src/thresholds.py`.
+
+### Individual case: Grant Taylor (CWS)
+Four-seam extension 7.40 → 7.19 ft (2025 → 2026), still about the 95th percentile. The drop started around his Sep 10, 2025 groin strain and continued through a heavier 2026 workload. The PDF report includes a 12-week restore-and-hold plan with physical markers and in-season check-ins.
+
+### PDF report
+`report/EP_Pitcher_Extension_Report.pdf` (full case study, built by `report/build_report.py`) and `report/EP_Pitcher_Extension_OnePager.pdf` (one-page summary).
+
 ### Pre-registered criteria (fixed before running the real data)
 - Practical unit: +0.3 ft of average fastball extension.
 - `CONFIRMED` = Benjamini–Hochberg q < 0.05 across 4 outcomes **and** the effect of +0.3 ft reaches: Whiff% ≥ +0.75 pts, CSW% ≥ +0.50 pts, RV/100 ≥ +0.20, xwOBA ≤ −0.005.
@@ -90,45 +114,52 @@ For a pitcher whose extension is below what his body and delivery allow:
 
 ### Monitoring metric
 - **Statcast average fastball extension**, rolling by outing, against the pitcher's own baseline.
-- A season-level change above **0.05 ft** is beyond measurement noise; above **0.10 ft** is meaningful.
-- A **drop** of 0.2 ft or more should trigger a health check before a mechanical fix (see point 4 above).
+- A season-level change above **0.05 ft** is beyond measurement noise.
+- In season: 5-outing average **0.13 ft** below the pitcher's own baseline = watch; **0.20 ft** below = alert and health check before a mechanical fix.
 
 ### 2027 watch list (post-hoc, not a test)
-No pitcher in the primary sample lost ≥ 0.3 ft from 2025 to 2026, so this list uses losses ≥ 0.15 ft (≈ 3× MDC). Injury searches were done for the names marked ✓; check the others before using them as cases.
+No pitcher in the primary sample lost ≥ 0.3 ft from 2025 to 2026, so this list uses losses ≥ 0.15 ft (≈ 3× MDC). Public injury records were checked for all ten (see `data/injury_exclusions.csv`).
 
-| Pitcher | 2026 team | Role | Ext 2025 → 2026 (ft) | Δ velo (mph) | Δ arm angle (°) | Notes |
+| Pitcher | 2026 team | Role | Ext 2025 → 2026 (ft) | Δ velo (mph) | Δ arm angle (°) | Notes (public injury check done for all ten) |
 |---|---|---|---|---|---|---|
 | Sean Burke ✓ | CWS | SP | 7.08 → 6.83 | +0.35 | −2.5 | No 2026 IL found; bulk-relief usage |
 | Freddy Peralta ✓ | NYM/TB | SP | 6.80 → 6.57 | −0.43 | −5.0 | Two trades; no 2026 IL found |
 | Grant Taylor ✓ | CWS | RP | 7.41 → 7.17 | −0.39 | −1.1 | Groin strain Sep 2025; opener role |
-| Daniel Lynch IV | KC | RP | 6.67 → 6.43 | +0.16 | +3.6 | |
-| Yohan Ramírez | PIT | RP | 7.14 → 6.92 | −0.01 | −3.8 | |
-| Jacob Latz | TEX | RP | 6.67 → 6.50 | +0.56 | +2.5 | |
-| Lake Bachar | MIA | RP | 6.09 → 5.92 | −0.48 | +2.6 | |
-| Orion Kerkering | PHI | RP | 6.41 → 6.25 | −0.29 | +2.4 | |
-| Cade Cavalli | WSH | SP | 6.55 → 6.39 | −0.40 | −7.4 | Arm-angle change |
-| Aroldis Chapman | BOS | RP | 7.27 → 7.12 | −1.43 | +0.1 | Velo also down |
+| Daniel Lynch IV ✓ | KC | RP | 6.67 → 6.43 | +0.16 | +3.6 | Elbow nerve IL Jul 2025; to rotation Aug 2026 |
+| Yohan Ramírez ✓ | PIT | RP | 7.14 → 6.92 | −0.01 | −3.8 | No IL found |
+| Jacob Latz ✓ | TEX | RP | 6.67 → 6.50 | +0.56 | +2.5 | No 2025–26 IL found; swingman |
+| Lake Bachar ✓ | MIA | RP | 6.09 → 5.92 | −0.48 | +2.6 | No IL found; opener role |
+| Orion Kerkering ✓ | PHI | RP | 6.41 → 6.25 | −0.29 | +2.4 | Hamstring strain, IL to open 2026 |
+| Cade Cavalli ✓ | WSH | SP | 6.55 → 6.39 | −0.40 | −7.4 | Calf contusion Aug 2026; arm-angle change |
+| Aroldis Chapman ✓ | BOS | RP | 7.27 → 7.12 | −1.43 | +0.1 | Hamstring; lat tightness Sep 2026; velo down |
 
 Full list: `results/offseason_targets_2027.csv`.
 
 ### Limitations
 - Observational: "came with", not "caused". No design isolates extension from everything else that changes in an offseason.
 - Season averages; extension within a game (fatigue) is not modeled.
-- Pitch shape (movement, spin) is not in the model; an extension change can come with a shape change.
+- Pitch shape and location were tested (v1.2–1.3); the two location effects did not survive multiple-test correction on their own.
 - Groups with ≥ 0.3 ft are small (12 gainers, 0 losers in the primary sample); the continuous model carries the result.
 - Height and body size are not in Statcast; between-pitcher differences (+2.3 whiff pts per ft) are partly body size, which is why the decision test is within pitcher.
 
 ### Corrections log
-- v1.0 (Nov 2026): first release. No corrections yet.
+- v1.0 (Nov 2026): first release.
+- v1.1 (Nov 2026): the value labels on `extension_dose_response.png` showed the whiff% numbers on top of the CSW% bars; corrected to the CSW% values. Results and tables were not affected. Added the PDF case-study report (`report/`).
+- v1.2 (Nov 2026): data pull now includes pitch movement and spin; added exploratory tests (called vs swinging strikes, pitch-shape controls) and the Grant Taylor case.
+- v1.3 (Nov 2026): added pitch location tests, data-based monitoring thresholds (replacing the earlier 0.10 / 0.2 ft rules of thumb), injury checks for the full 2027 watch list, and a one-page summary.
 
 ### Reproduce
 ```bash
+# PDF report: pip install weasyprint && python report/build_report.py
 pip install -r requirements.txt
 python src/pull_data.py          # ~20 min, ~2M fastballs, not committed
 python src/build_features.py
 python tests/test_synthetic.py   # known-answer test
 python src/analysis.py           # ~6 min (bootstraps)
+python src/decomposition.py      # exploratory follow-ups (called/swinging, shape, location)
+python src/thresholds.py         # monitoring thresholds
 python src/charts.py
+python report/build_report.py && python report/build_onepager.py
 ```
 
 ---
@@ -144,6 +175,16 @@ python src/charts.py
 3. **Los cambios grandes son raros, y cuando pasan se mantienen.** El cambio típico es pequeño (DE 0.12 pies); solo el 1.9% de los pares ganó 0.3 pies o más. Los cambios no se devuelven al año siguiente (pendiente −0.03). Hay que esperar ganancias pequeñas, pero que se quedan.
 4. **Una caída grande es una alerta de salud.** Los 5 pares que perdieron 0.3 pies o más tuvieron también una ausencia larga (IL o bajada a las menores) en una de las dos temporadas. `INTERPRETATION`: n = 5, es una señal para monitorear, no un hallazgo.
 5. **No agregar la extensión a un modelo de proyección de whiffs.** Fuera de muestra, agregarla no redujo el error (cambio en MAE +0.0002, IC −0.015 a +0.014).
+
+### Pruebas adicionales (v1.2) — `EXPLORATORY`
+- **Strikes cantados:** +0.56 puntos por cada +0.3 pies (q = 0.031), cerca del 71% de la ganancia de CSW%.
+- **Strikes abanicados:** +0.21, no significativo.
+- **Con control de la forma del lanzamiento** (IVB, quiebre horizontal, spin): el CSW% se mantuvo en +0.85 (p < 0.001).
+- En una temporada típica (695 rectas), +0.3 pies vinieron con unos 5.5 strikes más, unos 4 de ellos cantados.
+- **Ubicación:** más rectas en la zona (+0.80) y menos swings a esas rectas (−0.84); ninguno sobrevive solo a la corrección por cuatro pruebas. Sin efecto del umpire.
+
+### Caso individual: Grant Taylor (CWS)
+Extensión de la recta de cuatro costuras 7.40 → 7.19 pies (2025 → 2026). La caída empezó cerca de su distensión en la ingle (10 sep 2025). El reporte PDF trae un plan de 12 semanas.
 
 ### Criterios fijados antes de correr los datos reales
 - Unidad práctica: +0.3 pies de extensión promedio de la recta.
@@ -174,8 +215,8 @@ Por qué strikes y no daño: la extensión agrega unas **1.8 mph de velocidad pe
 
 ### Métrica de monitoreo
 - **Extensión promedio de la recta en Statcast**, por salida, contra la línea base del propio pitcher.
-- Un cambio de temporada mayor a **0.05 pies** es real; mayor a **0.10 pies** es importante.
-- Una **caída** de 0.2 pies o más: revisar salud antes de corregir mecánica.
+- Un cambio de temporada mayor a **0.05 pies** es real.
+- Durante la temporada: promedio de 5 salidas **0.13 pies** por debajo de la línea base del pitcher = vigilar; **0.20 pies** = alerta y revisión de salud antes de corregir mecánica.
 
 ### Limitaciones
 Estudio observacional ("vino con", no "causó"); promedios de temporada; sin forma del lanzamiento en el modelo; grupos de ≥ 0.3 pies pequeños; sin estatura en Statcast.

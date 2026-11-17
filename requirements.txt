@@ -4,3 +4,4 @@ scipy>=1.10
 statsmodels>=0.14
 matplotlib>=3.7
 requests>=2.31
+weasyprint>=60

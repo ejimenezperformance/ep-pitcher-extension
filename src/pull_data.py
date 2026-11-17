@@ -37,7 +37,9 @@ SEASONS = {  # approximate regular-season windows; game_type == "R" filters the 
 KEEP = [
     "game_date", "game_pk", "game_type", "pitcher", "player_name", "p_throws",
     "pitch_type", "release_speed", "effective_speed", "release_extension",
-    "release_pos_z", "arm_angle", "description", "events",
+    "release_pos_z", "arm_angle", "pfx_x", "pfx_z", "release_spin_rate",
+    "plate_x", "plate_z", "zone", "sz_top", "sz_bot",
+    "description", "events",
     "estimated_woba_using_speedangle", "woba_value", "woba_denom",
     "delta_run_exp", "inning", "inning_topbot", "home_team", "away_team",
     "at_bat_number", "pitch_number",
